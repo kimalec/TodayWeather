@@ -568,6 +568,11 @@ arpltnController.appendData = function(town, current, callback) {
     });
 };
 
+/**
+ * cityName이 없는 경우가 대표임
+ * todo #2162 각 지역별로 가장 최근 데이터 가지고 와야함.
+ * @param callback
+ */
 arpltnController.getSidoArpltn = function (callback) {
     SidoArpltn.find({"cityName" : ""}).sort({date:-1}).limit(20).lean().exec(function (err, list) {
         if (err) {
@@ -581,7 +586,7 @@ arpltnController.getSidoArpltn = function (callback) {
             return obj.date.getTime() === last.getTime();
         });
         if (list.length < 17) {
-            log.error("Fail to get full sido arpltn");
+            log.warn("Fail to get full sido arpltn");
         }
         callback(null, list);
     });
